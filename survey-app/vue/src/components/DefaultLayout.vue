@@ -20,7 +20,8 @@
 </template>
   
 <script>
-import { mapState } from 'vuex'
+import { mapState, useStore } from 'vuex'
+import { computed } from 'vue'
 
 import Footer from '../components/Footer.vue'
 import Navbar from '../components/Navbar.vue'
@@ -31,10 +32,18 @@ export default {
     computed: {
         ...mapState(['sideBarOpen'])
     },
+    setup() {
+      const store = useStore()
+
+      return {
+        user: computed(() => store.state.user.data),
+      }
+
+    },
     components: {
-    Sidebar,
-    Navbar,
-    Footer
+      Sidebar,
+      Navbar,
+      Footer
     }
 }
 </script>

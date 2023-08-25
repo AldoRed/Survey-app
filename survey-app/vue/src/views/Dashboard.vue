@@ -1,7 +1,7 @@
 <template>
     <div id="home">
 
-    <!-- breadcrumb -->
+        <!-- breadcrumb -->
         <nav class="text-sm font-semibold mb-6" aria-label="Breadcrumb">
         <ol class="list-none p-0 inline-flex">
             <li class="flex items-center text-blue-500">
@@ -16,8 +16,8 @@
         <!-- breadcrumb end -->
 
         <div class="lg:flex justify-between items-center mb-6">
-        <p class="text-2xl font-semibold mb-2 lg:mb-0">Good afternoon, Joe!</p>
-        <button class="bg-blue-500 hover:bg-blue-600 focus:outline-none rounded-lg px-6 py-2 text-white font-semibold shadow">View Logs</button>
+        <p class="text-2xl font-semibold mb-2 lg:mb-0">Good afternoon, Aldo!</p>
+        <button class="bg-blue-500 hover:bg-blue-600 focus:outline-none rounded-lg px-6 py-2 text-white font-semibold shadow">View answers</button>
         </div>
 
         <div class="flex flex-wrap -mx-3 mb-20">
@@ -30,7 +30,7 @@
 
             <div class="text-gray-700">
                 <p class="font-semibold text-3xl">237</p>
-                <p>Products Sold</p>
+                <p>Total Surveys</p>
             </div>
 
             </div>
@@ -44,7 +44,7 @@
 
             <div class="text-gray-700">
                 <p class="font-semibold text-3xl">177</p>
-                <p>Product Reviews</p>
+                <p>My surveys</p>
             </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
 
             <div class="text-gray-700">
                 <p class="font-semibold text-3xl">31</p>
-                <p>New Enquiries</p>
+                <p>Answered by me</p>
             </div>
             </div>
         </div>
@@ -70,7 +70,7 @@
 
             <div class="text-gray-700">
                 <p class="font-semibold text-3xl">1,653</p>
-                <p>Product Views</p>
+                <p>Total views</p>
             </div>
 
             </div>
@@ -96,42 +96,7 @@
             </div>
         </div>
 
-        <div class="w-full xl:w-1/3 px-3">
-            <p class="text-xl font-semibold mb-4">Recent Transactions</p>
-            <div class="w-full bg-white border rounded-lg p-4">
-            <div class="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 mb-4">
-                <div>
-                    <p class="font-semibold text-xl">Trent Murphy</p>
-                    <p>Product 1</p>
-                </div>
-                <span class="text-green-500 font-semibold text-lg">$25.00</span>
-            </div>
-
-            <div class="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 mb-4">
-                <div>
-                    <p class="font-semibold text-xl">Joseph Brent</p>
-                    <p>Product 34</p>
-                </div>
-                <span class="text-red-500 font-semibold text-lg">$74.99</span>
-            </div>
-
-            <div class="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2 mb-4">
-                <div>
-                    <p class="font-semibold text-xl">Jacob Bator</p>
-                    <p>Product 23</p>
-                </div>
-                <span class="text-green-500 font-semibold text-lg">$14.95</span>
-            </div>
-
-            <div class="w-full bg-gray-100 border rounded-lg flex justify-between items-center px-4 py-2">
-                <div>
-                    <p class="font-semibold text-xl">Alex Mason</p>
-                    <p>Product 66</p>
-                </div>
-                <span class="text-green-500 font-semibold text-lg">$44.99</span>
-            </div>
-            </div>
-        </div>
+        
 
         </div>
 
