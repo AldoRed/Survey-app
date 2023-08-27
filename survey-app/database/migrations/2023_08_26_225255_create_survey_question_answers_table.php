@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\SurveyQuestion;
+use App\Models\SurveyAnswer;
 
 return new class extends Migration
 {
