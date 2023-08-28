@@ -1,25 +1,25 @@
 <template>
     <h2 class="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 lg:text-3xl">Register</h2>
-    <form class="mx-auto max-w-lg rounded-lg border">
+    <form class="mx-auto max-w-lg rounded-lg border" @submit="register">
     <div class="flex flex-col gap-4 p-4 md:p-8">
         <div>
-        <label for="name" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">First Name</label>
-        <input name="name" type="name" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" placeholder="e.g. Camila"/>
-        </div>
-
-        <div>
-        <label for="lastname" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">Last Name</label>
-        <input name="lastname" type="lastname" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" placeholder="e.g. Smith"/>
+        <label for="name" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">Name</label>
+        <input name="name" type="name" v-model="user.name" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" placeholder="e.g. Camila Smith"/>
         </div>
 
         <div>
         <label for="email" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">Email</label>
-        <input name="email" type="email" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" placeholder="e.g. example@gmail.com"/>
+        <input name="email" type="email" v-model="user.email" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" placeholder="e.g. example@gmail.com"/>
         </div>
 
         <div>
         <label for="password" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">Password</label>
-        <input name="password" type="password" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <input name="password" type="password" v-model="user.password" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div>
+        <label for="password_confirmation" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">Confirm Password</label>
+        <input name="password_confirmation" type="password" v-model="user.password_confirmation" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
         <button class="block rounded-lg bg-gray-800 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-gray-700 focus-visible:ring active:bg-gray-600 md:text-base">Sign Up</button>
@@ -55,14 +55,26 @@
     </form>
 </template>
 
-<script>
+<script setup>
+import { BeakerIcon } from '@heroicons/vue/24/solid'
+import store from '../store';
+import { useRouter } from 'vue-router';
 
-export default {
-    name: "Register"
+const router = useRouter();
+const user = {
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: ''
+}
+
+function register(ev){
+    ev.preventDefault();
+    store
+    .dispatch('register', user)
+    .then((res) => {
+        router.push({name: 'Dashboard'});
+    });
 }
 
 </script>
-
-<style scoped>
-
-</style>

@@ -1,15 +1,34 @@
 <template>
     <h2 class="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 lg:text-3xl">Login</h2>
-    <form class="mx-auto max-w-lg rounded-lg border">
+    <form class="mx-auto max-w-lg rounded-lg border" @submit="login">
     <div class="flex flex-col gap-4 p-4 md:p-8">
+
+        <div v-if="errorMsg" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Error! </strong>
+        <span class="block sm:inline">{{ errorMsg }}</span>
+        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+            <svg @click="errorMsg = ''" class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <title>Close</title>
+            <path d="M14.348 14.849a1 1 0 0 1-1.414 0L10 11.414l-2.93 2.93a1 1 0 1 1-1.414-1.414l2.93-2.93-2.93-2.93a1 1 0 1 1 1.414-1.414l2.93 2.93 2.93-2.93a1 1 0 1 1 1.414 1.414l-2.93 2.93 2.93 2.93a1 1 0 0 1 0 1.414z"/>
+            </svg>
+        </span>
+        </div>
+
         <div>
         <label for="email" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">Email</label>
-        <input name="email" type="email" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" placeholder="email@example.com"/>
+        <input name="email" type="email" v-model="user.email" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" placeholder="email@example.com"/>
         </div>
 
         <div>
         <label for="password" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">Password</label>
-        <input name="password" type="password" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <input name="password" type="password" v-model="user.password" class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div>
+        <label for="remember" class="inline-flex items-center">
+            <input name="remember" type="checkbox" v-model="user.remember" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" checked/>
+            <span class="ml-2 text-sm text-gray-600 checked:bg-blue-500">Remember me</span>
+        </label>
         </div>
 
         <button class="block rounded-lg bg-gray-800 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-gray-700 focus-visible:ring active:bg-gray-600 md:text-base">Log in</button>
@@ -45,10 +64,31 @@
     </form>
 </template>
 
-<script>
+<script setup>
+import { BeakerIcon } from '@heroicons/vue/24/solid'
+import store from '../store';
+import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 
-export default {
-    name: "Login"
+const router = useRouter();
+const user = {
+    email: '',
+    password: '',
+    remember: false
 }
 
+let errorMsg = ref('');
+
+function login(ev){
+    ev.preventDefault();
+    store
+    .dispatch('login', user)
+    .then(() => {
+        router.push({
+            name: 'Dashboard'
+        });
+    }).catch((err) => {
+        errorMsg.value = err.response.data.message;
+    });
+}
 </script>
