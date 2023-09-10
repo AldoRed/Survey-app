@@ -10,7 +10,7 @@
             <!-- Add new question -->
             <button
                 type="button"
-                @click="emit('addQuestion', index + 1)"
+                @click="addQuestion()"
                 class="
                     flex
                     items-center
@@ -33,7 +33,7 @@
             <!-- Delete question -->
             <button
                 type="button"
-                @click="emit('deleteQuestion', index)"
+                @click="deleteQuestion()"
                 class="
                     flex
                     items-center
@@ -192,6 +192,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { v4 as uuidv4 } from 'uuid';
 import store from '../../store';
 
 const props = defineProps({
@@ -255,6 +256,14 @@ function dataChange() {
     }
 
     emit('change', data);
+}
+
+function addQuestion(){
+    emit('addQuestion', props.index + 1);
+}
+
+function deleteQuestion(){
+    emit('deleteQuestion', props.question);
 }
 
 </script>
