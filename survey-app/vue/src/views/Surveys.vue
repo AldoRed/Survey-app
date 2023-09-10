@@ -18,7 +18,7 @@
             </router-link>
 
         </div>
-    </header>
+    </header> 
 
     <main>
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -34,8 +34,6 @@
                         flex flex-col
                         py-4
                         px-6
-                        shadow-md
-                        bg-white
                         hover:bg-gray-50
                         h-[470px]
                         "
