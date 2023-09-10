@@ -14,11 +14,11 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
-            Create Survey
+            Add new survey
             </router-link>
 
         </div>
-    </header>
+    </header> 
 
     <main>
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -34,8 +34,6 @@
                         flex flex-col
                         py-4
                         px-6
-                        shadow-md
-                        bg-white
                         hover:bg-gray-50
                         h-[470px]
                         "
