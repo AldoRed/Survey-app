@@ -60,7 +60,7 @@
                 <div class="col-span-full">
                     <label for="photo" class="block text-sm font-medium leading-6 text-gray-900">Cover photo</label>
                     <div class="mt-2 flex items-center">
-                        <img v-if="model.title" :src="model.image" :alt="model.title" class="h-12 w-12 object-cover rounded-md">
+                        <img v-if="model.image" :src="model.image" :alt="model.title" class="h-12 w-12 object-cover rounded-md">
                         <svg v-else class="h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                         </svg>
@@ -149,11 +149,12 @@
 import { v4 as uuidv4 } from 'uuid';
 import store from '../store';
 import { ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import QuestionEditor from '../components/editor/QuestionEditor.vue';
 
 const route = useRoute();
+const router = useRouter();
 
 let model = ref({
     title: '',
@@ -194,6 +195,17 @@ function questionChange(question){
             return JSON.parse(JSON.stringify(question));
         }
         return q;
+    });
+}
+
+function saveSurvey(){
+    store.dispatch('saveSurvey', model.value).then(({ data }) => {
+        router.push({
+            name: 'SurveyView',
+            params: {
+                id: data.data.id,
+            },
+        });
     });
 }
 </script>
