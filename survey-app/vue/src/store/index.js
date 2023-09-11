@@ -153,6 +153,33 @@ const store = createStore({
         }
     },
     actions: {
+        saveSurvey({ commit }, survey) {
+            let response;
+            if(survey.id) {
+                response = new Promise ((resolve, reject) => {
+                    axiosClient.put('/surveys/'+survey.id, survey)
+                    .then(response => {
+                        commit("updateSurvey", response.data)
+                        resolve(response)
+                    })
+                    .catch(error => {
+                        reject(error)
+                    });
+                });
+            }else{
+                response = new Promise ((resolve, reject) => {
+                    axiosClient.post('/surveys', survey)
+                    .then(response => {
+                        commit("saveSurvey", response.data)
+                        resolve(response)
+                    })
+                    .catch(error => {
+                        reject(error)
+                    });
+                });
+            }
+            return response;
+        },
         toggleSidebar(context) {
             context.commit('toggleSidebar')
         },
@@ -194,6 +221,17 @@ const store = createStore({
         }
     },
     mutations: {
+        saveSurvey(state, survey) {
+            state.surveys = [...state.surveys, survey];
+        },
+        updateSurvey(state, survey) {
+            state.surveys = state.surveys.map(s => {
+                if(s.id === survey.id) {
+                    return survey;
+                }
+                return s;
+            });
+        },
         toggleSidebar (state) {
             state.sideBarOpen = !state.sideBarOpen
         },
