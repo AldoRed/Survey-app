@@ -222,12 +222,12 @@ const store = createStore({
     },
     mutations: {
         saveSurvey(state, survey) {
-            state.surveys = [...state.surveys, survey];
+            state.surveys = [...state.surveys, survey.data];
         },
         updateSurvey(state, survey) {
-            state.surveys = state.surveys.map(s => {
-                if(s.id === survey.id) {
-                    return survey;
+            state.surveys = state.surveys.map((s) => {
+                if(s.id === survey.data.id) {
+                    return survey.data;
                 }
                 return s;
             });
