@@ -144,6 +144,10 @@ const store = createStore({
             data: {},
             token: sessionStorage.getItem('TOKEN'),
         },
+        currentSurvey: {
+            loading: false,
+            data: {},
+        },
         surveys: [...tmpSurveys],
         questionTypes: ["text", "select", "radio", "checkbox", "textarea"],
     },
@@ -153,13 +157,30 @@ const store = createStore({
         }
     },
     actions: {
+        getSurvey({ commit }, id) {
+            commit("setCurrentSurveyLoading", true);
+            return new Promise((resolve, reject) => {
+                axiosClient.get('/surveys/'+id)
+                .then(response => {
+                    commit("setCurrentSurvey", response.data);
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error);
+                })
+                .finally(() => {
+                    commit("setCurrentSurveyLoading", false);
+                })
+            }, 1000)
+        },
         saveSurvey({ commit }, survey) {
+            delete survey.image_url;
             let response;
             if(survey.id) {
                 response = new Promise ((resolve, reject) => {
                     axiosClient.put('/surveys/'+survey.id, survey)
                     .then(response => {
-                        commit("updateSurvey", response.data)
+                        commit("setCurrentSurvey", response.data)
                         resolve(response)
                     })
                     .catch(error => {
@@ -170,7 +191,7 @@ const store = createStore({
                 response = new Promise ((resolve, reject) => {
                     axiosClient.post('/surveys', survey)
                     .then(response => {
-                        commit("saveSurvey", response.data)
+                        commit("setCurrentSurvey", response.data)
                         resolve(response)
                     })
                     .catch(error => {
@@ -221,16 +242,11 @@ const store = createStore({
         }
     },
     mutations: {
-        saveSurvey(state, survey) {
-            state.surveys = [...state.surveys, survey.data];
+        setCurrentSurveyLoading(state, loading) {
+            state.currentSurvey.loading = loading;
         },
-        updateSurvey(state, survey) {
-            state.surveys = state.surveys.map((s) => {
-                if(s.id === survey.data.id) {
-                    return survey.data;
-                }
-                return s;
-            });
+        setCurrentSurvey(state, survey) {
+            state.currentSurvey.data = survey.data;
         },
         toggleSidebar (state) {
             state.sideBarOpen = !state.sideBarOpen

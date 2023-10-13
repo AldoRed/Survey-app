@@ -14,8 +14,8 @@
                 </label>
                 <div class="mt-1 flex items-center">
                     <img
-                        v-if="model.image"
-                        :src="model.image"
+                        v-if="model.image_url"
+                        :src="model.image_url"
                         :alt="model.title"
                         class="w-64 h-48 object-cover"
                     />
@@ -60,15 +60,25 @@
                 <div class="col-span-full">
                     <label for="photo" class="block text-sm font-medium leading-6 text-gray-900">Cover photo</label>
                     <div class="mt-2 flex items-center">
-                        <img v-if="model.image" :src="model.image" :alt="model.title" class="h-12 w-12 object-cover rounded-md">
-                        <svg v-else class="h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                        </svg>
+                        <img 
+                            v-if="model.image" 
+                            :src="model.image"
+                            :alt="model.title" 
+                            class="h-12 w-12 object-cover rounded-md"
+                        />
+                        <span
+                            v-else
+                            class="inline-block h-12 w-12 rounded-md overflow-hidden bg-gray-100"
+                        >
+                            <svg class="h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                            </svg>
+                        </span>
 
                         <button type="button" class="rounded-md bg-white mx-2 px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                             <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
                                 <span>Change</span>
-                                <input id="file-upload" name="file-upload" type="file" class="sr-only" />
+                                <input id="file-upload" @change="onImageChoose" name="file-upload" type="file" class="sr-only" />
                             </label>
                         </button>
 
@@ -148,7 +158,7 @@
 <script setup>
 import { v4 as uuidv4 } from 'uuid';
 import store from '../store';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import QuestionEditor from '../components/editor/QuestionEditor.vue';
@@ -160,15 +170,36 @@ let model = ref({
     title: '',
     status: false,
     description: null,
-    image: null,
+    image_url: null,
     expire_date: null,
     questions: [],
 })
 
+// Watch to current survey data change and when this happens update local model
+watch(() => store.state.currentSurvey.data,
+    (newVal, oldVal) => {
+        model.value = {
+            ...JSON.parse(JSON.stringify(newVal)),
+            status: newVal.status === 'active',
+        };
+    }
+);
+
 if(route.params.id) {
-    model.value = store.state.surveys.find(
-        (s) => s.id === parseInt(route.params.id)
-    );
+    store.dispatch('getSurvey', route.params.id);
+}
+
+function onImageChoose(e){
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = () => {
+        model.value.image = reader.result;
+
+        model.value.image_url = reader.result;
+    };
+
+    reader.readAsDataURL(file);
 }
 
 function addQuestion(index){
@@ -197,6 +228,10 @@ function questionChange(question){
         return q;
     });
 }
+
+/**
+ * Create or update survey
+ */
 
 function saveSurvey(){
     store.dispatch('saveSurvey', model.value).then(({ data }) => {
