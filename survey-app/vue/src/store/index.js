@@ -154,6 +154,7 @@ const store = createStore({
     },
     actions: {
         saveSurvey({ commit }, survey) {
+            delete survey.image_url;
             let response;
             if(survey.id) {
                 response = new Promise ((resolve, reject) => {
