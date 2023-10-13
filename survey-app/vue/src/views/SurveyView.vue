@@ -158,7 +158,7 @@
 <script setup>
 import { v4 as uuidv4 } from 'uuid';
 import store from '../store';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import QuestionEditor from '../components/editor/QuestionEditor.vue';
@@ -170,15 +170,23 @@ let model = ref({
     title: '',
     status: false,
     description: null,
-    image: null,
+    image_url: null,
     expire_date: null,
     questions: [],
 })
 
+// Watch to current survey data change and when this happens update local model
+watch(() => store.state.currentSurvey.data,
+    (newVal, oldVal) => {
+        model.value = {
+            ...JSON.parse(JSON.stringify(newVal)),
+            status: newVal.status === 'active',
+        };
+    }
+);
+
 if(route.params.id) {
-    model.value = store.state.surveys.find(
-        (s) => s.id === parseInt(route.params.id)
-    );
+    store.dispatch('getSurvey', route.params.id);
 }
 
 function onImageChoose(e){
